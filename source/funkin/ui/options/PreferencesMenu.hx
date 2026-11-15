@@ -174,6 +174,14 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
     }, null, Preferences.hapticsIntensityMultiplier, 0.1, 5, 0.1, 1);
     #end
 
+    createPrefItemEnum('Ghost Tapping', 'Old Input: every press with no note in that lane counts as a miss. New Input: presses are free when no notes are near.', [
+      "Old Input" => 'strict',
+      "New Input" => 'permissive',
+    ], function(key:String, value:String):Void
+    {
+      Preferences.ghostTapMode = value;
+    }, Preferences.ghostTapMode == 'permissive' ? 'New Input' : 'Old Input');
+
     createPrefItemCheckbox('Bot Play', 'When enabled, songs play themselves with the bot. Bot runs save their score locally.', function(value:Bool):Void
     {
       Preferences.botPlay = value;

@@ -705,16 +705,12 @@ class Constants
    * OTHER
    */
   // ==============================
-  #if FEATURE_GHOST_TAPPING
-  // Hey there, Eric here.
-  // This feature is currently still in development. You can test it out by creating a special debug build!
-  // lime build windows -DFEATURE_GHOST_TAPPING
+  // Ghost tapping is chosen in Preferences (Old Input / New Input). See Preferences.ghostTapMode.
 
   /**
    * Duration, in seconds, after the player's section ends before the player can spam without penalty.
    */
   public static final GHOST_TAP_DELAY:Float = 3 / 8;
-  #end
 
   #if FEATURE_LOST_FOCUS_VOLUME
   /**

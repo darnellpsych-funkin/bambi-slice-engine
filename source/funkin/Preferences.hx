@@ -462,6 +462,25 @@ class Preferences
   }
 
   /**
+   * How ghost taps are judged: `'strict'` (Old Input) or `'permissive'` (New Input).
+   * @default `'strict'`
+   */
+  public static var ghostTapMode(get, set):String;
+
+  static function get_ghostTapMode():String
+  {
+    return Save?.instance?.options?.ghostTapMode ?? 'strict';
+  }
+
+  static function set_ghostTapMode(value:String):String
+  {
+    var save:Save = Save.instance;
+    save.options.ghostTapMode = value;
+    Save.system.flush();
+    return value;
+  }
+
+  /**
    * If enabled, the game will automatically launch in fullscreen on startup.
    * @default `true`
    */

@@ -208,9 +208,7 @@ class Strumline extends FlxSpriteGroup
    */
   public var strumlineScale(default, null):FlxPoint;
 
-  #if FEATURE_GHOST_TAPPING
   var ghostTapTimer:Float = 0.0;
-  #end
 
   /**
    * Handles note vibrations for this strumline
@@ -376,12 +374,9 @@ class Strumline extends FlxSpriteGroup
 
     updateNotes();
 
-    #if FEATURE_GHOST_TAPPING
     updateGhostTapTimer(elapsed);
-    #end
   }
 
-  #if FEATURE_GHOST_TAPPING
   /**
    * @return `true` if no notes are in range of the strumline and the player can spam without penalty.
    */
@@ -404,7 +399,6 @@ class Strumline extends FlxSpriteGroup
     // **yippee**
     return true;
   }
-  #end
 
   /**
    * Return notes that are within `Constants.HIT_WINDOW` ms of the strumline.
@@ -898,7 +892,6 @@ class Strumline extends FlxSpriteGroup
     return false;
   }
 
-  #if FEATURE_GHOST_TAPPING
   function updateGhostTapTimer(elapsed:Float):Void
   {
     // If it's still our turn, don't update the ghost tap timer.
@@ -911,7 +904,6 @@ class Strumline extends FlxSpriteGroup
       ghostTapTimer = 0;
     }
   }
-  #end
 
   /**
    * Called when the PlayState skips a large amount of time forward or backward.
@@ -1022,9 +1014,7 @@ class Strumline extends FlxSpriteGroup
     }
     resetScrollSpeed();
 
-    #if FEATURE_GHOST_TAPPING
     ghostTapTimer = 0;
-    #end
   }
 
   /**
@@ -1224,9 +1214,7 @@ class Strumline extends FlxSpriteGroup
       note.desaturate();
     }
 
-    #if FEATURE_GHOST_TAPPING
     ghostTapTimer = Constants.GHOST_TAP_DELAY;
-    #end
   }
 
   /**

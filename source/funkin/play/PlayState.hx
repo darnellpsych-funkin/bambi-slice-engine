@@ -3719,11 +3719,10 @@ class PlayState extends MusicBeatSubState
 
       var notesInDirection:Array<NoteSprite> = notesByDirection[input.noteDirection];
 
-      #if FEATURE_GHOST_TAPPING
-      if ((!playerStrumline.mayGhostTap()) && notesInDirection.length == 0)
-      #else
-      if (notesInDirection.length == 0)
-      #end
+      // Old Input (strict): every press with no note in that lane is a ghost miss.
+      // New Input (permissive): presses are free when no note is in range (see Strumline.mayGhostTap).
+      var canGhostTap:Bool = Preferences.ghostTapMode == 'permissive' && playerStrumline.mayGhostTap();
+      if (!canGhostTap && notesInDirection.length == 0)
       {
         // Pressed a wrong key with no notes nearby.
         // Perform a ghost miss (anti-spam).

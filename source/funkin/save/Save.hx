@@ -165,6 +165,7 @@ class Save implements ConsoleClass implements ISerializable
         autoPause: true,
         botPlay: false,
         language: 'en',
+        ghostTapMode: 'strict',
         vsyncMode: 'Off',
         strumlineBackgroundOpacity: 0,
         autoFullscreen: false,
@@ -1593,6 +1594,13 @@ typedef SaveDataOptions =
    * @default `'en'`
    */
   var language:String;
+
+  /**
+   * How ghost taps are judged. `strict` (Old Input) penalizes every press with no note in that lane.
+   * `permissive` (New Input) only penalizes presses when notes are in range.
+   * @default `'strict'`
+   */
+  var ghostTapMode:String;
 
   /**
    * If enabled, the game will utilize VSync (or adaptive VSync) on startup.
