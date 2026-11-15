@@ -164,6 +164,7 @@ class Save implements ConsoleClass implements ISerializable
         arrowTransparency: 12,
         autoPause: true,
         botPlay: false,
+        language: 'en',
         vsyncMode: 'Off',
         strumlineBackgroundOpacity: 0,
         autoFullscreen: false,
@@ -1586,6 +1587,12 @@ typedef SaveDataOptions =
    * @default `false`
    */
   var botPlay:Bool;
+
+  /**
+   * The language code for UI text (`en`, `es`, `pt` or `ru`).
+   * @default `'en'`
+   */
+  var language:String;
 
   /**
    * If enabled, the game will utilize VSync (or adaptive VSync) on startup.

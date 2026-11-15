@@ -443,6 +443,25 @@ class Preferences
   }
 
   /**
+   * The language code used for UI text. See `funkin.util.Translations.LANGUAGES`.
+   * @default `'en'`
+   */
+  public static var language(get, set):String;
+
+  static function get_language():String
+  {
+    return Save?.instance?.options?.language ?? 'en';
+  }
+
+  static function set_language(value:String):String
+  {
+    var save:Save = Save.instance;
+    save.options.language = value;
+    Save.system.flush();
+    return value;
+  }
+
+  /**
    * If enabled, the game will automatically launch in fullscreen on startup.
    * @default `true`
    */
