@@ -563,6 +563,8 @@ class PolymodHandler
     Polymod.addImportAlias('funkin.play.cutscene.dialogue.ScriptedDialogueBox', funkin.play.cutscene.dialogue.DialogueBox);
     Polymod.addImportAlias('funkin.play.cutscene.dialogue.ScriptedSpeaker', funkin.play.cutscene.dialogue.Speaker);
     Polymod.addImportAlias('funkin.play.event.ScriptedSongEvent', funkin.play.event.SongEvent);
+    Polymod.addImportAlias('funkin.modding.modules.ScriptedModule', funkin.modding.module.Module);
+    Polymod.addImportAlias('funkin.modding.module.ScriptedModule', funkin.modding.module.Module);
     Polymod.addImportAlias('funkin.play.notes.ScriptedStrumline', funkin.play.notes.Strumline);
     Polymod.addImportAlias('funkin.play.notes.notekind.ScriptedNoteKind', funkin.play.notes.notekind.NoteKind);
     Polymod.addImportAlias('funkin.play.notes.notestyle.ScriptedNoteStyle', funkin.play.notes.notestyle.NoteStyle);
@@ -589,6 +591,21 @@ class PolymodHandler
 
     // 'ControlsHandler' was moved to the 'funkin.touch.input' package.
     Polymod.addImportAlias('funkin.mobile.input.ControlsHandler', funkin.touch.input.ControlsHandler);
+    #if FEATURE_TOUCH_CONTROLS
+    Polymod.addImportAlias('funkin.mobile.ui.FunkinHitbox', funkin.touch.ui.FunkinHitbox);
+    Polymod.addImportAlias('funkin.mobile.ui.FunkinBackButton', funkin.touch.ui.FunkinBackButton);
+    Polymod.addImportAlias('funkin.mobile.ui.mainmenu.FunkinOptionsButton', funkin.touch.ui.FunkinOptionsButton);
+    Polymod.addImportAlias('funkin.mobile.ui.options.objects.HitboxShowcase', funkin.touch.ui.options.objects.HitboxShowcase);
+    Polymod.addImportAlias('funkin.mobile.ui.options.objects.SchemeMenuButton', funkin.touch.ui.options.objects.SchemeMenuButton);
+    Polymod.addImportAlias('funkin.mobile.ui.FunkinHint', funkin.touch.ui.FunkinHitbox.FunkinHint);
+    final abstracts = polymod.hscript._internal.PolymodScriptClass.abstractClassImpls;
+    final controlSchemes = abstracts.get('funkin.touch.ui.FunkinHitboxControlSchemes');
+    if (controlSchemes != null)
+    {
+      abstracts.set('funkin.mobile.ui.FunkinHitboxControlSchemes', controlSchemes);
+      abstracts.set('funkin.mobile.ui.FunkinHitbox.FunkinHitboxControlSchemes', controlSchemes);
+    }
+    #end
   }
 
   /**
