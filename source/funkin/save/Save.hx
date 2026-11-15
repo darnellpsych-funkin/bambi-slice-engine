@@ -1467,6 +1467,12 @@ typedef SaveScoreData =
    * The count of each judgement hit.
    */
   var tallies:SaveScoreTallyData;
+
+  /**
+   * Whether this score came from a Bot Play run.
+   * Missing on scores saved before bot runs were recorded.
+   */
+  var ?botRun:Bool;
 }
 
 /**

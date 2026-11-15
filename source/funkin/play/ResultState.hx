@@ -14,6 +14,7 @@ import flixel.util.FlxSignal;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import flixel.text.FlxBitmapText;
+import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -522,6 +523,16 @@ class ResultState extends MusicBeatSubState
     scorePopin.visible = false;
     scorePopin.zIndex = 1200;
     add(scorePopin);
+
+    // Marks scores from Bot Play runs so they are not confused with real scores.
+    if (params?.isBotPlayMode ?? false)
+    {
+      var botPlayTag:FlxText = new FlxText(0, 16, FlxG.width - 32, 'BOT PLAY', 32);
+      botPlayTag.setFormat(funkin.assets.Paths.font('ui/fonts/VCR OSD Mono'), 32, FlxColor.CYAN, FlxTextAlign.RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+      botPlayTag.borderSize = 3;
+      botPlayTag.zIndex = 1300;
+      add(botPlayTag);
+    }
     new FlxTimer().start(36 / 24, _ ->
     {
       scorePopin.visible = true;

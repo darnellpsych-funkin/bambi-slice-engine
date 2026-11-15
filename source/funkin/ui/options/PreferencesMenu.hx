@@ -27,6 +27,7 @@ import funkin.util.TouchUtil;
 import funkin.util.SwipeUtil;
 #end
 import funkin.util.HapticUtil;
+import funkin.util.Translations;
 
 class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
 {
@@ -34,6 +35,12 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
   var preferenceItems:FlxTypedSpriteGroup<FlxSprite>;
   var preferenceDesc:Array<String> = [];
   var itemDesc:FlxText;
+
+  /**
+   * TTF labels drawn over each option's name, so translated text can use ñ, accents and Cyrillic.
+   * Each one follows its menu item's position and alpha.
+   */
+  var ttfLabels:Array<{source:TextMenuItem, text:FlxText}> = [];
   var itemDescBox:FunkinSprite;
   var menuCamera:FlxCamera;
   var hudCamera:FlxCamera;
@@ -97,7 +104,7 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
   {
     itemDescBox.makeSolidColor(1, 1, FlxColor.BLACK);
     itemDescBox.alpha = 0.6;
-    itemDesc.setFormat(funkin.assets.Paths.font('ui/fonts/VCR OSD Mono'), 32, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+    itemDesc.setFormat(funkin.assets.Paths.font(Translations.fontPath()), 32, FlxColor.WHITE, FlxTextAlign.CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
     itemDesc.borderSize = 3;
 
     // Update the text.
@@ -291,11 +298,12 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
       onChange(value);
       checkbox.currentValue = value;
     }, true, available);
+    addTTFLabel(item, prefName);
 
     item.cameras = [menuCamera];
     checkbox.cameras = [menuCamera];
     preferenceItems.add(checkbox);
-    preferenceDesc.push(prefDesc);
+    preferenceDesc.push(Translations.tr(prefDesc));
   }
 
   /**
@@ -322,9 +330,10 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
       precision, onChange, valueFormatter);
     item.cameras = [menuCamera];
     item.lefthandText.cameras = [menuCamera];
+    addTTFLabel(item, prefName);
     items.addItem(prefName, item);
     preferenceItems.add(item.lefthandText);
-    preferenceDesc.push(prefDesc);
+    preferenceDesc.push(Translations.tr(prefDesc));
   }
 
   /**
@@ -348,9 +357,10 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
       newCallback, formatter);
     item.cameras = [menuCamera];
     item.lefthandText.cameras = [menuCamera];
+    addTTFLabel(item, prefName);
     items.addItem(prefName, item);
     preferenceItems.add(item.lefthandText);
-    preferenceDesc.push(prefDesc);
+    preferenceDesc.push(Translations.tr(prefDesc));
   }
 
   /**
@@ -364,9 +374,36 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
     var item = new EnumPreferenceItem<T>(funkin.ui.FullScreenScaleMode.gameNotchSize.x, (120 * items.length) + 30, prefName, values, defaultKey, onChange);
     item.cameras = [menuCamera];
     item.lefthandText.cameras = [menuCamera];
+    addTTFLabel(item, prefName);
     items.addItem(prefName, item);
     preferenceItems.add(item.lefthandText);
-    preferenceDesc.push(prefDesc);
+    preferenceDesc.push(Translations.tr(prefDesc));
+  }
+
+  /**
+   * Adds a TTF label for an option's name and blanks its AtlasText name, which cannot draw ñ, accents or Cyrillic.
+   */
+  function addTTFLabel(item:TextMenuItem, prefName:String):Void
+  {
+    var label:FlxText = new FlxText(0, 0, 0, Translations.tr(prefName), 32);
+    label.setFormat(funkin.assets.Paths.font(Translations.fontPath()), 32, FlxColor.WHITE, FlxTextAlign.LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+    label.borderSize = 3;
+    label.cameras = [menuCamera];
+    preferenceItems.add(label);
+    ttfLabels.push({source: item, text: label});
+    item.atlasText.text = '';
+  }
+
+  override function update(elapsed:Float):Void
+  {
+    super.update(elapsed);
+
+    for (entry in ttfLabels)
+    {
+      entry.text.x = entry.source.atlasText.x;
+      entry.text.y = entry.source.atlasText.y;
+      entry.text.alpha = entry.source.alpha;
+    }
   }
 
   override function exit():Void

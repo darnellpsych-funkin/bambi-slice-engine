@@ -4242,6 +4242,7 @@ class PlayState extends MusicBeatSubState
           totalNotesHit: Highscore.tallies.totalNotesHit,
           totalNotes: Highscore.tallies.totalNotes,
         },
+        botRun: isBotPlayMode,
       };
 
       // adds current song data into the tallies for the level (story levels)
@@ -4724,6 +4725,7 @@ class PlayState extends MusicBeatSubState
           totalNotesHit: talliesToUse.totalNotesHit,
           totalNotes: talliesToUse.totalNotes,
         },
+        botRun: isBotPlayMode,
       },
       isNewHighscore: isNewHighscore,
       isPracticeMode: isPracticeMode,
