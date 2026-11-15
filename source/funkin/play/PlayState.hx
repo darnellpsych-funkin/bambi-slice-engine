@@ -141,6 +141,11 @@ typedef PlayStateParams =
    */
   ?botPlayMode:Bool,
   /**
+   * Whether this run is a chart editor playtest. Playtests never save scores.
+   * @default `false`
+   */
+  ?chartPlaytest:Bool,
+  /**
    * Whether the results screen should show up before returning to the chart editor.
    * @default `false`
    */
@@ -446,6 +451,11 @@ class PlayState extends MusicBeatSubState
    * Whether the results screen should show up before returning to the chart editor.
    */
   public var isPlaytestResults:Bool = false;
+
+  /**
+   * Whether this run is a chart editor playtest (never saves scores).
+   */
+  public var isChartPlaytest:Bool = false;
 
   /**
    * Whether the player has dropped below zero health,
@@ -961,8 +971,9 @@ class PlayState extends MusicBeatSubState
     if (params.targetVariation != null) currentVariation = params.targetVariation;
     if (params.targetInstrumental != null) currentInstrumental = params.targetInstrumental;
     isPracticeMode = params.practiceMode ?? false;
-    isBotPlayMode = params.botPlayMode ?? false;
+    isBotPlayMode = params.botPlayMode ?? Preferences.botPlay;
     isPlaytestResults = params.playtestResults ?? false;
+    isChartPlaytest = params.chartPlaytest ?? false;
     isMinimalMode = params.minimalMode ?? false;
     startTimestamp = params.startTimestamp ?? 0.0;
     playbackRate = params.playbackRate ?? 1.0;
@@ -4238,13 +4249,13 @@ class PlayState extends MusicBeatSubState
       Highscore.talliesLevel = Highscore.combineTallies(Highscore.tallies, Highscore.talliesLevel);
 
       #if FEATURE_NEWGROUNDS
-      Leaderboards.submitSongScore(currentSong.id, suffixedDifficulty, Std.int(songScore));
+      if (!isBotPlayMode) Leaderboards.submitSongScore(currentSong.id, suffixedDifficulty, Std.int(songScore));
       #end
 
-      if (!isPracticeMode && !isBotPlayMode)
+      if (!isPracticeMode && !(isBotPlayMode && isChartPlaytest))
       {
         #if FEATURE_NEWGROUNDS
-        Events.logCompleteSong(currentSong.id, currentVariation);
+        if (!isBotPlayMode) Events.logCompleteSong(currentSong.id, currentVariation);
         #end
 
         isNewHighscore = Save.instance.isSongHighScore(currentSong.id, suffixedDifficulty, data);

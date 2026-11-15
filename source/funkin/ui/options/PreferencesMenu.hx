@@ -174,6 +174,11 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
     }, null, Preferences.hapticsIntensityMultiplier, 0.1, 5, 0.1, 1);
     #end
 
+    createPrefItemCheckbox('Bot Play', 'When enabled, songs play themselves with the bot. Bot runs save their score locally.', function(value:Bool):Void
+    {
+      Preferences.botPlay = value;
+    }, Preferences.botPlay);
+
     #if !mobile
     createPrefItemCheckbox('Pause on Unfocus', 'When enabled, the game automatically pauses when losing focus.', function(value:Bool):Void
     {

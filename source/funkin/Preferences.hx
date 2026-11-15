@@ -424,6 +424,25 @@ class Preferences
   }
 
   /**
+   * If enabled, songs start with the bot playing for you. Bot runs save their score locally.
+   * @default `false`
+   */
+  public static var botPlay(get, set):Bool;
+
+  static function get_botPlay():Bool
+  {
+    return Save?.instance?.options?.botPlay ?? false;
+  }
+
+  static function set_botPlay(value:Bool):Bool
+  {
+    var save:Save = Save.instance;
+    save.options.botPlay = value;
+    Save.system.flush();
+    return value;
+  }
+
+  /**
    * If enabled, the game will automatically launch in fullscreen on startup.
    * @default `true`
    */

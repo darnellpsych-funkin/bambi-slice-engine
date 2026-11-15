@@ -163,6 +163,7 @@ class Save implements ConsoleClass implements ISerializable
         arrowRGB: true,
         arrowTransparency: 12,
         autoPause: true,
+        botPlay: false,
         vsyncMode: 'Off',
         strumlineBackgroundOpacity: 0,
         autoFullscreen: false,
@@ -1579,6 +1580,12 @@ typedef SaveDataOptions =
    * @default `true`
    */
   var autoPause:Bool;
+
+  /**
+   * If enabled, songs are played by the bot (botplay). Scores from bot runs are saved locally.
+   * @default `false`
+   */
+  var botPlay:Bool;
 
   /**
    * If enabled, the game will utilize VSync (or adaptive VSync) on startup.

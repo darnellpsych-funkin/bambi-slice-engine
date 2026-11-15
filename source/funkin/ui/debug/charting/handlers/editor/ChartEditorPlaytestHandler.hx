@@ -120,6 +120,7 @@ class ChartEditorPlaytestHandler
       practiceMode: state.playtestPracticeMode,
       botPlayMode: state.playtestBotPlayMode,
       playtestResults: state.playtestShowResults,
+      chartPlaytest: true,
       minimalMode: minimal,
       startTimestamp: startTimestamp,
       playbackRate: playbackRate,
