@@ -1248,6 +1248,7 @@ private final class LuaScriptManagerImpl
     Lua.register(state, 'addLuaEnum', cpp.Callable.fromStaticFunction(lua_addLuaEnum));
     Lua.register(state, 'getLuaSave', cpp.Callable.fromStaticFunction(lua_getLuaSave));
     Lua.register(state, 'setLuaSave', cpp.Callable.fromStaticFunction(lua_setLuaSave));
+    Lua.register(state, 'bambiApi', cpp.Callable.fromStaticFunction(lua_bambiApi));
     Lua.register(state, 'flushSave', cpp.Callable.fromStaticFunction(lua_flushSave));
     Lua.register(state, 'getScreenWidth', cpp.Callable.fromStaticFunction(lua_getScreenWidth));
     Lua.register(state, 'getScreenHeight', cpp.Callable.fromStaticFunction(lua_getScreenHeight));
@@ -2513,6 +2514,16 @@ private final class LuaScriptManagerImpl
   {
     if (luaslice.debug.ModDebugSession.current == null) Save.system.flush();
     return 0;
+  }
+
+  static function lua_bambiApi(L:cpp.RawPointer<Lua_State>):Int
+  {
+    var manager = current();
+    if (manager == null) return 0;
+
+    var action = readString(L, 1, '');
+    var value = manager.readValue(L, 2);
+    return manager.pushReturn(L, luaslice.lua.BambiApi.call(action, value));
   }
 
   static function lua_getLuaSave(L:cpp.RawPointer<Lua_State>):Int
