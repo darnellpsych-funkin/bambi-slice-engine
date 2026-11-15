@@ -19,7 +19,7 @@ class Constants
    * The title of the game, for debug printing purposes.
    * Change this if you're making an engine.
    */
-  public static final TITLE:String = 'LuaSlice';
+  public static final TITLE:String = 'Bambi-Slice';
 
   public static final LUASLICE_VERSION:String = 'v0.1.0';
 

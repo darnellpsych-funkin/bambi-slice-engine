@@ -1,4 +1,6 @@
-# LuaSlice
+# Bambi-Slice
+
+Bambi-Slice is a fork of LuaSlice, built on the same V-Slice 0.8.7 base and Lua API. The name is the only change for now.
 LuaSlice is a fork of Friday Night Funkin' V-Slice that adds built-in Lua modding support and small tweaks to the engine itself. It is made for people who want to create gameplay scripts, events, menus, options and other mod features without having to write everything in Haxe.
 
 LuaSlice's original API uses `.lua` and `.luag`. Psych scripts use `.luap` and `.luapg` in a separate runtime; the global suffix controls loading scope, not a shared Psych Lua state. LuaSlice also includes F5 hot reloading, Lua error reports, persistent save data, custom Chart Editor events, and Lua hooks for gameplay and menus.

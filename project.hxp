@@ -43,12 +43,12 @@ class Project extends HXProject
   /**
    * The game's name. Used as the default window title.
    */
-  static final TITLE:String = "LuaSlice";
+  static final TITLE:String = "Bambi-Slice";
 
   /**
    * The game's name on mobile. Used as the title for the game on the home screen.
    */
-  static final TITLE_MOBILE:String = "LuaSlice";
+  static final TITLE_MOBILE:String = "Bambi-Slice";
 
   /**
    * A package name used for identifying the app on various app stores.
@@ -59,7 +59,7 @@ class Project extends HXProject
    * The name of the generated executable file.
    * For example, `"Funkin"` will create a file called `Funkin.exe`.
    */
-  static final EXECUTABLE_NAME:String = "LuaSlice";
+  static final EXECUTABLE_NAME:String = "Bambi-Slice";
 
   /**
    * The relative location of the source code.
