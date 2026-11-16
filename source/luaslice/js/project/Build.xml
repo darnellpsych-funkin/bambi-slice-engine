@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml>
+  <pragma once="true" />
+  <files id="haxe">
+    <compilerflag value="-I${this_dir}/../../../../vendor/quickjs" />
+    <compilerflag value="-I${this_dir}/../../../../native/quickjs" />
+  </files>
+  <files id="__main__">
+    <compilerflag value="-I${this_dir}/../../../../vendor/quickjs" />
+    <compilerflag value="-I${this_dir}/../../../../native/quickjs" />
+  </files>
+  <files id="luaslice-js">
+    <tag value="haxe" />
+    <compilerflag value="-I${this_dir}/../../../../vendor/quickjs" />
+    <compilerflag value="-I${this_dir}/../../../../native/quickjs" />
+    <file name="${this_dir}/../../../../vendor/quickjs/quickjs.c" />
+    <file name="${this_dir}/../../../../vendor/quickjs/dtoa.c" />
+    <file name="${this_dir}/../../../../vendor/quickjs/libregexp.c" />
+    <file name="${this_dir}/../../../../vendor/quickjs/libunicode.c" />
+    <file name="${this_dir}/../../../../native/quickjs/js_bridge.c" />
+  </files>
+  <target id="haxe">
+    <files id="luaslice-js" />
+  </target>
+</xml>

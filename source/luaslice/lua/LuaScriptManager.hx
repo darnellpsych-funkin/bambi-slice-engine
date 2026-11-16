@@ -817,7 +817,7 @@ private final class LuaScriptManagerImpl
     return pauseMenuConfiguredThisPass;
   }
 
-  static function scriptRoots():Array<String>
+  public static function scriptRoots():Array<String>
   {
     final modRoot = PolymodHandler.getModRoot();
     final roots = [modRoot];

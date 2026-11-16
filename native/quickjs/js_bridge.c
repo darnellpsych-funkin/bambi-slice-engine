@@ -10,6 +10,20 @@ struct BambiJsState {
   JSContext *ctx;
 };
 
+/* print(...values): writes the values separated by spaces, then a newline. */
+static JSValue js_print(JSContext *ctx, JSValueConst this_val, int argc, JSValueConst *argv) {
+  for (int i = 0; i < argc; i++) {
+    const char *s = JS_ToCString(ctx, argv[i]);
+    if (s) {
+      printf("%s%s", i ? " " : "", s);
+      JS_FreeCString(ctx, s);
+    }
+  }
+  printf("\n");
+  fflush(stdout);
+  return JS_UNDEFINED;
+}
+
 BambiJsState *bambi_js_new(void) {
   BambiJsState *state = malloc(sizeof(BambiJsState));
   if (!state) return NULL;
@@ -17,6 +31,10 @@ BambiJsState *bambi_js_new(void) {
   if (!state->rt) { free(state); return NULL; }
   state->ctx = JS_NewContext(state->rt);
   if (!state->ctx) { JS_FreeRuntime(state->rt); free(state); return NULL; }
+
+  JSValue global = JS_GetGlobalObject(state->ctx);
+  JS_SetPropertyStr(state->ctx, global, "print", JS_NewCFunction(state->ctx, js_print, "print", 1));
+  JS_FreeValue(state->ctx, global);
   return state;
 }
 
@@ -27,23 +45,22 @@ void bambi_js_free(BambiJsState *state) {
   free(state);
 }
 
-static void copy_exception(JSContext *ctx, char *err, size_t err_len) {
-  if (!err || err_len == 0) return;
+static void print_exception(JSContext *ctx) {
   JSValue exc = JS_GetException(ctx);
   const char *msg = JS_ToCString(ctx, exc);
-  snprintf(err, err_len, "%s", msg ? msg : "unknown JavaScript error");
+  fprintf(stderr, "[JsScriptManager] %s\n", msg ? msg : "unknown JavaScript error");
   if (msg) JS_FreeCString(ctx, msg);
   JS_FreeValue(ctx, exc);
 }
 
-int bambi_js_eval(BambiJsState *state, const char *source, const char *name, char *err, size_t err_len) {
+int bambi_js_eval(BambiJsState *state, const char *source, const char *name) {
   if (!state || !state->ctx) {
-    if (err && err_len) snprintf(err, err_len, "JavaScript runtime not available");
+    fprintf(stderr, "[JsScriptManager] JavaScript runtime not available\n");
     return -1;
   }
   JSValue result = JS_Eval(state->ctx, source, strlen(source), name, JS_EVAL_TYPE_GLOBAL);
   if (JS_IsException(result)) {
-    copy_exception(state->ctx, err, err_len);
+    print_exception(state->ctx);
     JS_FreeValue(state->ctx, result);
     return -1;
   }

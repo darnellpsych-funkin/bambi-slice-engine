@@ -1,6 +1,7 @@
 package funkin.play;
 
 #if FEATURE_LUA_SCRIPTS
+import luaslice.js.JsScriptManager;
 import luaslice.lua.LuaScriptManager;
 #end
 #if (FEATURE_SSCRIPT_SCRIPTS || FEATURE_NXSCRIPT_SCRIPTS)
@@ -243,6 +244,7 @@ class PlayState extends MusicBeatSubState
 
   #if FEATURE_LUA_SCRIPTS
   var luaScriptManager:Null<LuaScriptManager> = null;
+  var jsScriptManager:Null<JsScriptManager> = null;
   var pendingLuaReload:Bool = false;
   #end
 
@@ -2441,6 +2443,8 @@ class PlayState extends MusicBeatSubState
     luaScriptManager?.callHook('onDestroy', []);
     luaScriptManager?.destroy();
     luaScriptManager = null;
+    jsScriptManager?.destroy();
+    jsScriptManager = null;
     initLuaScripts();
     luaScriptManager?.callHook('onCreate', []);
     luaScriptManager?.callHook('onReload', []);
@@ -2461,6 +2465,13 @@ class PlayState extends MusicBeatSubState
       if (cleanupPerformed) break;
       luaScriptManager ??= new LuaScriptManager();
       luaScriptManager.loadScript(path);
+    }
+
+    for (path in JsScriptManager.findGameplayScripts())
+    {
+      if (cleanupPerformed) break;
+      jsScriptManager ??= new JsScriptManager();
+      jsScriptManager.loadScript(path);
     }
   }
   #end
@@ -4511,6 +4522,8 @@ class PlayState extends MusicBeatSubState
     luaScriptManager?.callHook('onDestroy', []);
     luaScriptManager?.destroy();
     luaScriptManager = null;
+    jsScriptManager?.destroy();
+    jsScriptManager = null;
     #end
 
     #if (FEATURE_SSCRIPT_SCRIPTS || FEATURE_NXSCRIPT_SCRIPTS)
