@@ -1502,9 +1502,14 @@ private final class LuaScriptManagerImpl
       return false;
     }
 
-    // The file defines package.preload entries; its CLI part does not run because `arg` is nil here.
+    // fennel.lua starts with a shebang, which luaL_dostring does not skip. Its CLI tail reads the global `arg`,
+    // which is nil inside the engine and raises an error after package.preload.fennel is already defined.
+    // So the result here is ignored on purpose: the require step below is the real check.
+    var fennelText:String = source;
+    if (StringTools.startsWith(fennelText, '#!')) fennelText = fennelText.substr(fennelText.indexOf('\n') + 1);
+
     final top = Lua.gettop(state);
-    if (LuaL.dostring(state, source) != Lua.OK) return false;
+    LuaL.dostring(state, fennelText);
     Lua.settop(state, top);
 
     if (LuaL.dostring(state, "fennel = require('fennel')\n__fennelCompile = function(src, name) return fennel.compileString(src, {filename = name}) end") != Lua.OK)
