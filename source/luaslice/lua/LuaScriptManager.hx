@@ -1504,7 +1504,7 @@ private final class LuaScriptManagerImpl
 
     // The file defines package.preload entries; its CLI part does not run because `arg` is nil here.
     final top = Lua.gettop(state);
-    if (LuaL.dostring(state, source) != Lua.OK) return false;
+    if (LuaL.dostring(state, fennelLibrarySource(source)) != Lua.OK) return false;
     Lua.settop(state, top);
 
     if (LuaL.dostring(state, "fennel = require('fennel')\n__fennelCompile = function(src, name) return fennel.compileString(src, {filename = name}) end") != Lua.OK)
@@ -1512,6 +1512,21 @@ private final class LuaScriptManagerImpl
 
     fennelReady = true;
     return true;
+  }
+
+  // The bundle is Fennel's CLI build. luaL_loadstring rejects the leading "#!" line, and the
+  // CLI section at the end reads `arg` and would open a REPL, so keep only the module part.
+  static function fennelLibrarySource(source:String):String
+  {
+    var text = source;
+    if (StringTools.startsWith(text, '#!'))
+    {
+      final newline = text.indexOf('\n');
+      text = newline < 0 ? '' : text.substr(newline + 1);
+    }
+
+    final cut = text.indexOf('\nfennel = require("fennel")');
+    return cut < 0 ? text : text.substr(0, cut);
   }
 
   // Works like LuaL.loadfile for .fnl: leaves the loaded chunk on the stack, or the error message on failure.
