@@ -1,0 +1,129 @@
+{
+  "version": "1.0.0",
+  "name": "BF Very Scared",
+  "renderType": "sparrow",
+  "assetPath": "gameplay/characters/bfVeryScared/bfVeryScared",
+  "flipX": true,
+  "scale": 1,
+  "singTime": 4,
+  "offsets": [
+    0,
+    0
+  ],
+  "cameraOffsets": [
+    0,
+    0
+  ],
+  "startingAnimation": "idle",
+  "animations": [
+    {
+      "name": "idle",
+      "prefix": "BF idle dance afraid",
+      "offsets": [
+        0,
+        0
+      ],
+      "frameRate": 24,
+      "looped": false
+    },
+    {
+      "name": "idle-loop",
+      "prefix": "BF idle dance afraid",
+      "frameIndices": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "offsets": [
+        0,
+        0
+      ],
+      "frameRate": 24,
+      "looped": true
+    },
+    {
+      "name": "singLEFT",
+      "prefix": "left fear",
+      "offsets": [
+        11,
+        0
+      ],
+      "frameRate": 24,
+      "looped": false
+    },
+    {
+      "name": "singDOWN",
+      "prefix": "down fear",
+      "offsets": [
+        -28,
+        -46
+      ],
+      "frameRate": 24,
+      "looped": false
+    },
+    {
+      "name": "singUP",
+      "prefix": "up fear",
+      "offsets": [
+        -17,
+        74
+      ],
+      "frameRate": 24,
+      "looped": false
+    },
+    {
+      "name": "singRIGHT",
+      "prefix": "right fear",
+      "offsets": [
+        -72,
+        -17
+      ],
+      "frameRate": 25,
+      "looped": false
+    },
+    {
+      "name": "singLEFTmiss",
+      "prefix": "left fear",
+      "offsets": [
+        -27,
+        -6
+      ],
+      "frameRate": 24,
+      "looped": false
+    },
+    {
+      "name": "singDOWNmiss",
+      "prefix": "down fear",
+      "offsets": [
+        -26,
+        -6
+      ],
+      "frameRate": 24,
+      "looped": false
+    },
+    {
+      "name": "singUPmiss",
+      "prefix": "up fear",
+      "offsets": [
+        -26,
+        -6
+      ],
+      "frameRate": 24,
+      "looped": false
+    },
+    {
+      "name": "singRIGHTmiss",
+      "prefix": "right fear",
+      "offsets": [
+        -27,
+        -6
+      ],
+      "frameRate": 24,
+      "looped": false
+    }
+  ]
+}
