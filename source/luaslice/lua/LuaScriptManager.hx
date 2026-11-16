@@ -37,7 +37,6 @@ import hxluajit.Lua;
 import hxluajit.LuaL;
 import hxluajit.Types.Lua_State;
 import luaslice.script.ScriptProfiler;
-import openfl.Assets;
 import sys.FileSystem;
 import sys.io.File;
 #end
@@ -118,8 +117,7 @@ private final class LuaScriptManagerImpl
 
     try
     {
-      final loadStatus = isFennelScript(path) ? loadFennelFile(path) : LuaL.loadfile(state, path);
-      if (loadStatus != Lua.OK)
+      if (LuaL.loadfile(state, path) != Lua.OK)
       {
         final error = readError();
         trace('[LuaScriptManager] Failed to load ${path}: ${error}');
@@ -853,7 +851,7 @@ private final class LuaScriptManagerImpl
       for (entry in entries)
       {
         final lower = entry.toLowerCase();
-        if ((StringTools.endsWith(lower, '.lua') || StringTools.endsWith(lower, '.luag') || StringTools.endsWith(lower, '.fnl')) && (accept == null || accept(lower)))
+        if ((StringTools.endsWith(lower, '.lua') || StringTools.endsWith(lower, '.luag')) && (accept == null || accept(lower)))
           add(Path.join([folder, entry]));
       }
     };
@@ -869,7 +867,6 @@ private final class LuaScriptManagerImpl
       {
         add(Path.join([base, 'global.luag']));
         add(Path.join([base, 'global.lua']));
-        add(Path.join([base, 'global.fnl']));
       }
       addFolder(scripts, entry ->
       {
@@ -889,7 +886,6 @@ private final class LuaScriptManagerImpl
       {
         add(Path.join([scripts, name + '.luag']));
         add(Path.join([scripts, name + '.lua']));
-        add(Path.join([scripts, name + '.fnl']));
       }
       for (folder in songFolders) addFolder(folder);
     }
@@ -1481,54 +1477,6 @@ private final class LuaScriptManagerImpl
       LuaErrorManager.report('api-prelude-error', 'lua-api', 'LuaSlice', error);
     }
   }
-
-  // Fennel (.fnl) support: the bundled compiler is loaded once per state, then each .fnl file is compiled to Lua and loaded.
-  static final FENNEL_ASSET:String = 'assets/luaslice/fennel.lua';
-  var fennelReady:Bool = false;
-
-  static function isFennelScript(path:String):Bool
-  {
-    return StringTools.endsWith(path.toLowerCase(), '.fnl');
-  }
-
-  function ensureFennel():Bool
-  {
-    if (fennelReady) return true;
-
-    final source:Null<String> = Assets.exists(FENNEL_ASSET) ? Assets.getText(FENNEL_ASSET) : (FileSystem.exists(FENNEL_ASSET) ? File.getContent(FENNEL_ASSET) : null);
-    if (source == null)
-    {
-      Lua.pushstring(state, 'Fennel compiler not found: ${FENNEL_ASSET}');
-      return false;
-    }
-
-    // The file defines package.preload entries; its CLI part does not run because `arg` is nil here.
-    final top = Lua.gettop(state);
-    if (LuaL.dostring(state, source) != Lua.OK) return false;
-    Lua.settop(state, top);
-
-    if (LuaL.dostring(state, "fennel = require('fennel')\n__fennelCompile = function(src, name) return fennel.compileString(src, {filename = name}) end") != Lua.OK)
-      return false;
-
-    fennelReady = true;
-    return true;
-  }
-
-  // Works like LuaL.loadfile for .fnl: leaves the loaded chunk on the stack, or the error message on failure.
-  function loadFennelFile(path:String):Int
-  {
-    if (!ensureFennel()) return 2;
-
-    Lua.getglobal(state, '__fennelCompile');
-    Lua.pushstring(state, File.getContent(path));
-    Lua.pushstring(state, path);
-    if (Lua.pcall(state, 2, 1, 0) != Lua.OK) return 2;
-
-    final luaSource = Std.string(Lua.tostring(state, -1));
-    Lua.pop(state, 1);
-    return LuaL.loadstring(state, luaSource);
-  }
-
   function registerPsychStyleAliases():Void
   {
     Lua.register(state, 'makeLuaSprite', cpp.Callable.fromStaticFunction(lua_addSprite));
