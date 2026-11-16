@@ -233,6 +233,14 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
   {
     super.update(elapsed);
 
+    // Keep the TTF option names on top of their menu items.
+    for (entry in ttfLabels)
+    {
+      entry.text.x = entry.source.atlasText.x;
+      entry.text.y = entry.source.atlasText.y;
+      entry.text.alpha = entry.source.alpha;
+    }
+
     // Positions the camera to the selected item.
     if (items != null) camFollow.y = items.selectedItem.y;
 
@@ -392,18 +400,6 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
     preferenceItems.add(label);
     ttfLabels.push({source: item, text: label});
     item.atlasText.text = '';
-  }
-
-  override function update(elapsed:Float):Void
-  {
-    super.update(elapsed);
-
-    for (entry in ttfLabels)
-    {
-      entry.text.x = entry.source.atlasText.x;
-      entry.text.y = entry.source.atlasText.y;
-      entry.text.alpha = entry.source.alpha;
-    }
   }
 
   override function exit():Void
