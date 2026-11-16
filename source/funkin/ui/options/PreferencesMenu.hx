@@ -124,6 +124,15 @@ class PreferencesMenu extends Page<OptionsState.OptionsMenuPageName>
   function createPrefItems():Void
   {
     #if FEATURE_NAUGHTYNESS
+    // Language: keys are the native names, values are the codes from Translations.LANGUAGES.
+    // The menu labels are built once, so the new language applies the next time the menu opens.
+    createPrefItemEnum('Language', 'Language used for menu text. Takes effect the next time this menu is opened.', [
+      for (code in Translations.LANGUAGES) Translations.LANGUAGE_NAMES.get(code) => code
+    ], function(key:String, value:String):Void
+    {
+      Preferences.language = value;
+    }, Translations.LANGUAGE_NAMES.get(Translations.currentLanguage()));
+
     createPrefItemCheckbox('Naughtyness', 'When enabled, raunchy content (such as swearing, etc.) is displayed.', function(value:Bool):Void
     {
       Preferences.naughtyness = value;
